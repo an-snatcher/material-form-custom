@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div>
+    <form action="#" id="form-user" class="custom-form">
+      <h3 class="text-center">Html Form</h3>
+      <div class="form-group3">
+        <label for="new" class="animated-label"><input type="radio" class="form-control2 status" name="status" id="new"
+            value="new" checked /> New</label>
+        <label for="existing" class="animated-label"> <input type="radio" class="form-control2 status" name="status"
+            id="existing" value="existing" /> Existing</label>
+      </div>
+      <div class="form-group newValue">
+        <input type="text" class="form-control" name="user" id="user" />
+        <label for="user" class="animated-label">New Value</label>
+      </div>
+      <div class="form-group2 dropdown" style="display: none;">
+        <select id="demo" name="demo" class="form-control">
+          <option value="Html5">Html5</option>
+          <option value="CSS3">CSS3</option>
+          <option value="Javascript">Javascript</option>
+          <option value="Ruby">Ruby</option>
+          <option value="Python">Python</option>
+          <option value="C++">C++</option>
+        </select>
+        <label for="demo" class="animated-label2">Select Value</label>
+      </div>
+
+      <div class="form-group">
+        <textarea class="form-control" name="description" id="description" cols="30" rows="5"></textarea>
+        <label for="description" class="animated-label">Description</label>
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control" name="website" id="website" />
+        <label for="website" class="animated-label">Url</label>
+      </div>
+      <div class="submit">
+        <button class="btn btn-primary btn-block" id="submit" disabled>Submit</button>
+      </div>
+    </form>
+  </div>
+
+</body>
+
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('select').wrap('<div class="select_wrapper"></div>')
+    $('select').parent().prepend('<span>' + $(this).find(':selected').text() + '</span>');
+    $('select').parent().children('span').width($('select').width());
+    $('select').css('display', 'none');
+    $('select').parent().append('<ul class="select_inner"></ul>');
+    $('select').children().each(function () {
+      var opttext = $(this).text();
+      var optval = $(this).val();
+      $('select').parent().children('.select_inner').append('<li id="' + optval + '">' + opttext + '</li>');
+    });
+
+
+
+    $('select').parent().find('li').on('click', function () {
+      var cur = $(this).attr('id');
+      $('select').parent().children('span').text($(this).text());
+      $('select').children().removeAttr('selected');
+      $('select').children('[value="' + cur + '"]').attr('selected', 'selected');
+      console.log($('select').children('[value="' + cur + '"]').text());
+    });
+    $('select').parent().on('click', function () {
+      $(this).find('ul').slideToggle('fast');
+    });
+  });
+  $('.status').click(function () {
+    let status = $(this).val();
+
+    if (status == 'new') {
+      $('.newValue').show();
+      $('.dropdown').hide();
+    } else {
+      $('.newValue').hide();
+      $('.dropdown').show();
+    }
+  })
+  $('input').change(function () {
+    if ($(this).val()) {
+      $('.animated-label').css('top', '0');
+    }
+  })
+  $('textarea').change(function () {
+    if ($(this).val()) {
+      $('.animated-label').css('top', '0');
+    }
+  })
+  $('select').change(function () {
+    if ($(this).val()) {
+      $('.animated-label2').css('top', '0');
+    }
+  })
+  $("#form-user").validate({
+    onkeyup: false,
+    ignore: ":disabled,:hidden",
+    rules: {
+      user: "required",
+      description: {
+        maxlength: 250
+      },
+      website: {
+        required: true,
+        url: true,
+      },
+    },
+    messages: {
+      user: "New Value is required",
+      description: {
+        required: "Maximam text 250",
+      },
+      website: {
+        url: "Please enter valid url",
+        required: 'Url is required'
+      },
+    },
+    submitHandler: function (form) {
+      form.submit();
+    }
+  })
+
+  $('input').on('blur keyup', function () {
+    if ($("#form-user").valid()) {
+      $('#submit').prop('disabled', false);
+    } else {
+      $('#submit').prop('disabled', 'disabled');
+    }
+  });
+</script>
